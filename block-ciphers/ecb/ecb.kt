@@ -22,10 +22,10 @@ fun encryptECB(inputFile: String, outputFile: String, key: SecretKey) {
 }
 
 fun main() {
-    println("Generating AES key...")
+    println("Generating AES key...\n")
     val aesKey = generateAESKey()
     val aesKeyBase64 = Base64.getEncoder().encodeToString(aesKey.encoded) // just for printing purposes
-    println("AES key generated:\n$aesKeyBase64")
+    println("AES key generated:\n$aesKeyBase64 \n")
 
     val inputFiles = listOf("file1.txt", "file2.txt", "file3.txt")
 
@@ -35,7 +35,7 @@ fun main() {
         val time = measureTimeMillis {
             encryptECB(inputFile, outputFile, aesKey)
         }
-        println("Encryption time: $time ms")
+        println("Encryption time: $time ms\n")
     }
 
     println("Encryption finished.")
