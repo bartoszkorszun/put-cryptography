@@ -12,7 +12,7 @@ fun generateAESKey(): SecretKey {
 }
 
 fun encryptECB(inputFile: String, outputFile: String, key: SecretKey) {
-    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding") // PKCS5Padding ensures that the input is padded to a multiple of 16 bytes
     cipher.init(Cipher.ENCRYPT_MODE, key)
 
     val inputBytes = File("input", inputFile).readBytes()
