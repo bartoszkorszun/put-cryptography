@@ -29,6 +29,8 @@ fun main() {
 
     val inputFiles = listOf("file1.txt", "file2.txt", "file3.txt")
 
+    encryptECB("file1.txt", "file1_enc.txt", aesKey) // encrypting the first file so JIT can create the necessary classes #justJavaThings
+
     inputFiles.forEachIndexed { index, inputFile ->
         val outputFile = "file${index + 1}_enc.txt"
         println("Encrypting $inputFile to $outputFile...")
