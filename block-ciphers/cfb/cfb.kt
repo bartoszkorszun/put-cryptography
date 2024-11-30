@@ -13,7 +13,7 @@ fun generateAESKey(): SecretKey {
     return keyGen.generateKey()
 }
 
-fun encryptOFB(inputFile: String, outputFile: String, key: SecretKey) {
+fun encryptCFB(inputFile: String, outputFile: String, key: SecretKey) {
     val cipher = Cipher.getInstance("AES/CFB/NoPadding")
     
     val iv = ByteArray(16)
@@ -37,13 +37,13 @@ fun main() {
 
     val inputFiles = listOf("file1.txt", "file2.txt", "file3.txt")
 
-    encryptOFB("file1.txt", "file1_enc.txt", aesKey) // encrypting the first file so JIT can create the necessary classes #justJavaThings
+    encryptCFB("file1.txt", "file1_enc.txt", aesKey) // encrypting the first file so JIT can create the necessary classes #justJavaThings
 
     inputFiles.forEachIndexed { index, inputFile ->
         val outputFile = "file${index + 1}_enc.txt"
         println("Encrypting $inputFile to $outputFile...")
         val time = measureTimeMillis {
-            encryptOFB(inputFile, outputFile, aesKey)
+            encryptCFB(inputFile, outputFile, aesKey)
         }
         println("Encryption time: $time ms\n")
     }
