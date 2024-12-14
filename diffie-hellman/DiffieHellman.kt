@@ -1,75 +1,76 @@
-import java.math.BigInteger
 import java.security.SecureRandom
-import java.util.*
+import kotlin.math.sqrt
 
 fun main() {
-    val n = generatePrime(128)
+    val n = generatePrime(31) 
     val g = findPrimitiveRoot(n)
 
     println("Prime number: $n \nPrimitive root: $g")
-
-    
 }
 
-fun generatePrime(bits: Int): BigInteger {
-    val random = SecureRandom() 
-    return BigInteger.probablePrime(bits, random)
+fun generatePrime(bits: Int): Int {
+    val secureRandom = SecureRandom()
+    while (true) {
+        val candidate = secureRandom.nextInt((1 shl bits) - 1) + (1 shl (bits - 1))
+        if (isPrime(candidate)) {
+            return candidate
+        }
+    }
 }
 
-fun findPrimitiveRoot(n: BigInteger): BigInteger {
-    val primeSet = mutableSetOf<BigInteger>()
-    val phi = n - BigInteger.ONE
+fun isPrime(number: Int): Boolean {
+    if (number < 2) return false
+    for (i in 2..sqrt(number.toDouble()).toInt()) {
+        if (number % i == 0) return false
+    }
+    return true
+}
 
-    findPrimeFactors(primeSet, phi)
+fun findPrimitiveRoot(n: Int): Int {
+    val phi = n - 1
+    val primeFactors = findPrimeFactors(phi)
 
-    for (i in 8999999..9999999) {
-        var isPrimitiveRoot = false
-        val ni = n.subtract(BigInteger(i.toString()))
-        for (prime in primeSet) {
-            if (power(ni, phi / prime, n) == BigInteger.ONE) {
-                isPrimitiveRoot = true
+    for (candidate in n - 999 downTo 2) {
+        var isPrimitiveRoot = true
+        for (factor in primeFactors) {
+            if (modularExponentiation(candidate, phi / factor, n) == 1) {
+                isPrimitiveRoot = false
                 break
             }
         }
-        if (!isPrimitiveRoot) {
-            return ni
+        if (isPrimitiveRoot) {
+            return candidate
         }
     }
-
-    return BigInteger.ZERO
+    return -1 
 }
 
-fun findPrimeFactors(primeSet: MutableSet<BigInteger>, n: BigInteger) {
-    var num = n
-    while (num % BigInteger.TWO == BigInteger.ZERO) {
-        primeSet.add(BigInteger.TWO)
-        num /= BigInteger.TWO
-    }
-
-    for (i in 3 until num.sqrt().toInt() step 2) {
-        while (num % BigInteger(i.toString()) == BigInteger.ZERO) {
-            primeSet.add(BigInteger(i.toString()))
-            num /= BigInteger(i.toString())
+fun findPrimeFactors(n: Int): List<Int> {
+    val factors = mutableListOf<Int>()
+    var number = n
+    var divisor = 2
+    while (number >= 2) {
+        if (number % divisor == 0) {
+            factors.add(divisor)
+            while (number % divisor == 0) {
+                number /= divisor
+            }
         }
+        divisor++
     }
-
-    if (num > BigInteger.TWO) {
-        primeSet.add(num)
-    }
+    return factors
 }
 
-fun power(a: BigInteger, b: BigInteger, mod: BigInteger): BigInteger {
-    var result = BigInteger.ONE
-    var x = a % mod
-
-    var y = b
-    while (y > BigInteger.ZERO) {
-        if (y % BigInteger.TWO == BigInteger.ONE) {
-            result = (result * x) % mod
+fun modularExponentiation(base: Int, exponent: Int, mod: Int): Int {
+    var result = 1
+    var b = base % mod
+    var e = exponent
+    while (e > 0) {
+        if (e % 2 == 1) {
+            result = (result * b) % mod
         }
-        x = (x * x) % mod
-        y /= BigInteger.TWO
+        e = e shr 1
+        b = (b * b) % mod
     }
-
     return result
 }
