@@ -1,26 +1,21 @@
 import kotlin.math.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 
-class AB(name: String, n: Double, g: Double): Thread() {
-
-    private var num: Double
-    private var prime: Double
+class AB(
+    private name: String, 
+    private n: Int, 
+    private g: Int, 
+    private sendChanned: Channel<Int>,    
+    private receiveChannel: Channel<Int>
+): Thread() {
 
     override fun start() {
         println("Thread $name started")
     }
 
-    init {
-        prime = generatePrime(31)
-        num = g.pow(prime) % n
-        println("num $num")
-    }
-
-    fun calculateK(xy: Double, n: Double): Double {
-        println("calc K ${xy.pow(prime)}")
-        return xy.pow(prime) % n
-    }
-
-    fun getNum(): Double {
-        return num
-    }
+    override fun run() {
+        val prime = generatePrime(31)
+        println("Prime number: $prime")
+    }    
 }
