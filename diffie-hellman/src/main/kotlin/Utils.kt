@@ -25,7 +25,10 @@ fun isPrimitiveRoot(g: Int, n: Int): Boolean {
     val factors = primeFactors(phi)
     for (factor in factors) {
         if (BigInteger.valueOf(g.toLong())
-                .modPow(BigInteger.valueOf((phi / factor).toLong()), BigInteger.valueOf(n.toLong()))
+            .modPow(
+                BigInteger.valueOf((phi / factor).toLong()), 
+                BigInteger.valueOf(n.toLong())
+            )
                 == BigInteger.ONE) {
             return false
         }
@@ -60,4 +63,14 @@ fun findPrimitiveRoot(n: Int): Int {
             return g
         }
     }
+}
+
+fun riseToPowModN(base: Int, power: Int, mod: Int): Int {
+    val xy = BigInteger.valueOf(base.toLong())
+    .modPow(
+        BigInteger.valueOf(power.toLong()), 
+        BigInteger.valueOf(mod.toLong())
+    )
+
+    return xy.toInt()
 }
