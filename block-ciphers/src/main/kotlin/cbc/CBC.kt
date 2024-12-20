@@ -20,7 +20,7 @@ class CBC {
         val iv = ByteArray(16)
         SecureRandom().nextBytes(iv)
         
-        val inputBytes = File("input", inputFile).readBytes()
+        val inputBytes = File("src/main/kotlin/input", inputFile).readBytes()
         val encryptedBytes = mutableListOf<Byte>()
 
         var previousBlock = iv
@@ -42,7 +42,7 @@ class CBC {
             previousBlock = encryptedBlock
         }
 
-        File("output", outputFile).writeBytes(iv + encryptedBytes.toByteArray())
+        File("src/main/kotlin/cbc/output", outputFile).writeBytes(iv + encryptedBytes.toByteArray())
     }
 
     fun create(): MutableList<Long> {

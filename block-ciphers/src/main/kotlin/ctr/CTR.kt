@@ -24,11 +24,11 @@ class CTR {
 
         cipher.init(Cipher.ENCRYPT_MODE, key, ivSpec)
         
-        val inputBytes = File("input", inputFile).readBytes()
+        val inputBytes = File("src/main/kotlin/input", inputFile).readBytes()
 
         val encryptedBytes = cipher.doFinal(inputBytes)
 
-        File("output", outputFile).writeBytes(iv + encryptedBytes)
+        File("src/main/kotlin/ctr/output", outputFile).writeBytes(iv + encryptedBytes)
     }
 
     fun create(): MutableList<Long> {

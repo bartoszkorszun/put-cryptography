@@ -17,10 +17,11 @@ class ECB {
         val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding") // PKCS5Padding ensures that the input is padded to a multiple of 16 bytes
         cipher.init(Cipher.ENCRYPT_MODE, key)
 
-        val inputBytes = File("input", inputFile).readBytes()
-        val encryptedBytes = cipher.doFinal(inputBytes)
+        val inputBytes = File("src/main/kotlin/input", inputFile).readBytes()
 
-        File("output", outputFile).writeBytes(encryptedBytes)
+        val encryptedBytes = cipher.doFinal(inputBytes)
+        
+        File("src/main/kotlin/ecb/output/", outputFile).writeBytes(encryptedBytes)
     }
 
     fun create(): MutableList<Long> {
