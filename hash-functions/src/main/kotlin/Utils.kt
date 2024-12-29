@@ -3,6 +3,46 @@ import java.security.MessageDigest
 import kotlin.random.Random
 import kotlin.system.measureNanoTime
 
+fun generateHashBytes(input: ByteArray, algorithm: String): ByteArray {
+    return MessageDigest.getInstance(algorithm).digest(input)
+}
+
+fun calculateBitDifference(hash1: ByteArray, hash2: ByteArray): Int {
+    var differences = 0
+    for (i in hash1.indices) {
+        val xor = hash1[i].toInt() xor hash2[i].toInt()
+        differences += Integer.bitCount(xor)
+    }
+    return differences
+}
+
+fun testSAC(input: String, algorithm: String) {
+    val originalBytes = input.toByteArray()
+    val originalHash = generateHashBytes(originalBytes, algorithm)
+
+    println("Testing SAC for $algorithm")
+    println("Input length: ${originalBytes.size} bytes")
+
+    val bitDifferences = mutableListOf<Int>()
+
+    for (bitPosition in 0 until originalBytes.size * 8) {
+        val modifiedBytes = originalBytes.copyOf()
+
+        val byteIndex = bitPosition / 8
+        val bitIndex = bitPosition % 8
+        modifiedBytes[byteIndex] = (modifiedBytes[byteIndex].toInt() xor (1 shl bitIndex)).toByte()
+
+        val modifiedHash = generateHashBytes(modifiedBytes, algorithm)
+
+        val bitDifference = calculateBitDifference(originalHash, modifiedHash)
+        bitDifferences.add(bitDifference)
+    }
+
+    val averageDifference = bitDifferences.average()
+    println("Average bit difference: $averageDifference")
+    println("Expected average for SAC: ${originalHash.size * 8 / 0.5}")
+}
+
 fun getFirst12Bits(hash: String): String {
     return hash.take(3)
 }
