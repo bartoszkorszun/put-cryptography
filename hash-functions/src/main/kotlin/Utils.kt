@@ -2,16 +2,27 @@ import java.io.File
 import java.security.MessageDigest
 import kotlin.random.Random
 import kotlin.system.measureNanoTime
+import kotlin.experimental.xor
 
 fun generateHashBytes(input: ByteArray, algorithm: String): ByteArray {
     return MessageDigest.getInstance(algorithm).digest(input)
 }
 
+fun Byte.countOneBits(): Int {
+    var count = 0
+    var value = this.toInt() and 0xFF 
+    while (value != 0) {
+        count += value and 1
+        value = value shr 1 
+    }
+    return count
+}
+
 fun calculateBitDifference(hash1: ByteArray, hash2: ByteArray): Int {
     var differences = 0
     for (i in hash1.indices) {
-        val xor = hash1[i].toInt() xor hash2[i].toInt()
-        differences += Integer.bitCount(xor)
+        val xor = (hash1[i] xor hash2[i]) 
+        differences += xor.countOneBits() 
     }
     return differences
 }
@@ -40,7 +51,7 @@ fun testSAC(input: String, algorithm: String) {
 
     val averageDifference = bitDifferences.average()
     println("Average bit difference: $averageDifference")
-    println("Expected average for SAC: ${originalHash.size * 8 / 0.5}")
+    println("Expected average for SAC: ${originalHash.size * 8 / 2.0}")
 }
 
 fun getFirst12Bits(hash: String): String {
