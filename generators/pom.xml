@@ -8,7 +8,6 @@
 
     <properties>
         <kotlin.version>1.9.0</kotlin.version>
-        <kotlinx.coroutines.version>1.7.3</kotlinx.coroutines.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
