@@ -1,5 +1,11 @@
 fun testBit(bitSeq: String): Boolean {
     val countOnes = bitSeq.count { it == '1' }
+    print("Bit test: $countOnes | ")
+    if (countOnes !in 9725..10275) {
+        println("Bit test failed")
+    } else {
+        println("Bit test passed")
+    }
     return countOnes in 9725..10275
 }
 
@@ -44,10 +50,12 @@ fun testSeries(bitSeq: String): Boolean {
     for ((length, count) in seriesCounts) {
         val (min, max) = ranges[length]!!
         if (count !in min..max) {
+            println("Series test failed for $length. Count: $count")
             return false
         }
     }
 
+    println("Series test passed. Counts: $seriesCounts")
     return true
 }
 
@@ -57,9 +65,11 @@ fun testLongSeries(bitSeq: String): Boolean {
             bitSeq.substring(i, i + 26).all { it == '1' } ||
             bitSeq.substring(i, i + 26).all { it == '0' }
         ) {
+            println("Long series found at $i")
             return false
         }
     }
+    println("Long series test passed")
     return true
 }
 
@@ -70,9 +80,14 @@ fun testPoker(bitSeq: String): Boolean {
         counts[subSeq] = counts.getOrDefault(subSeq, 0) + 1
     }
 
-    val sum = counts.values.sum()
     val x = counts.values.sumOf { it * it }
     val poker = 16.0 / 5000 * x - 5000
 
+    print("Poker test: $poker | ")
+    if (poker !in 2.16..46.17) {
+        println("Poker test failed")
+    } else {
+        println("Poker test passed")
+    }
     return poker in 2.16..46.17
 }

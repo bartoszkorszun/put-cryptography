@@ -9,7 +9,7 @@ fun main() {
             testLongSeries(bitSeq) &&
             testPoker(bitSeq)
         ) {
-            println("All tests passed for bit sequence: \n$bitSeq")
+            println("All tests passed for bit sequence")
             break
         }
     }
